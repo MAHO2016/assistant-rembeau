@@ -800,7 +800,7 @@ with col2:
 # === FOOTER ===
 st.markdown("""
 <div class="rembeau-footer">
-    <span class="footer-left">2025 AssistantRembeau — Collection MAHO</span>
-    <span class="footer-right">Odilon A. MAFON — ComptaProgresso</span>
+    <span class="footer-left">2026 AssistantRembeau — Collection MAHO</span>
+    <span class="footer-right">Odilon A. MAFON</span>
 </div>
 """, unsafe_allow_html=True)
