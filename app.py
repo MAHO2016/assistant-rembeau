@@ -583,7 +583,70 @@ Historique :
 {historique}
 
 Question : {question}
+TPS — TAXE PROFESSIONNELLE SYNTHETIQUE (Articles 178 a 190 CGI) :
 
+REGIMES D'IMPOSITION AU BENIN — IL EN EXISTE DEUX :
+1. REGIME DU REEL :
+   - Personnes morales (toutes, quel que soit le CA)
+   - Personnes physiques dont le CA est superieur a 50 000 000 FCFA
+   - Impots : IS pour personnes morales / IBA pour personnes physiques
+
+2. REGIME DU FORFAIT (TPS) :
+   - Personnes physiques dont le CA est inferieur ou egal a 50 000 000 FCFA
+   - Impot applicable : TPS (Taxe Professionnelle Synthetique)
+
+REGLE ABSOLUE :
+- Il existe DEUX regimes au Benin — pas trois
+- Ne jamais dire "regime simplifie" — ce terme n'existe pas au Benin
+- TPS = regime du forfait UNIQUEMENT pour les personnes physiques
+- Les personnes morales relevent TOUJOURS du regime du reel
+
+CHAMP D'APPLICATION TPS (Article 178) :
+- Contribuables relevant de l'IBA dont le CA est inferieur
+  ou egal a 50 000 000 FCFA
+- Quelle que soit la nature de l'activite
+
+LA TPS EST LIBERATOIRE DE 4 IMPOTS (Article 178) :
+1. L'IBA (Impot sur les Benefices d'Affaires)
+2. La contribution des patentes
+3. La contribution des licences
+4. Le VPS (Versement Patronal sur Salaires)
+
+EXONERATIONS TPS (Article 180) :
+- Peintres, sculpteurs, graveurs et artistes vendant leur art
+- Entreprises d'exploitation agricole, peche et elevage
+- Entreprises nouvelles : exonerees les 12 premiers mois
+
+CALCUL (Article 183) :
+- Taux : 5% des recettes annuelles
+- Minimum : 10 000 FCFA
+- Redevance ORTB en sus : 4 000 FCFA
+- La taxe est due par commune et par etablissement
+
+DECLARATION (Article 184) :
+- Au plus tard le 30 avril de chaque annee
+- En 3 exemplaires accompagnes des etats financiers
+- Contient : nom/raison sociale, IFU, nature activite,
+  localisation, 5 principaux fournisseurs et clients,
+  montant des achats, recettes annuelles, loyers professionnels
+
+PAIEMENT (Article 185) :
+- 2 acomptes provisionnels bases sur l'impot de l'annee precedente
+- 1er acompte : 10 premiers jours de fevrier
+- 2eme acompte : 10 premiers jours de juin
+- Solde eventuel : au plus tard le 30 avril
+
+CHANGEMENT DE REGIME (Article 182) :
+- Si CA depasse le seuil → passage obligatoire a l'IBA
+- Retour TPS possible si CA reste inferieur au seuil
+  pendant 2 exercices consecutifs
+
+AFFECTATION (Article 190) :
+- 50% budget de l'Etat
+- 50% budget de la collectivite locale
+
+NB IMPORTANT : Les contribuables TPS sont EXONERES du VPS
+(Article 192 CGI).
 Reponse pedagogique et encourageante :"""
 
 
