@@ -775,7 +775,7 @@ else:
     # Input
     questions_restantes = MAX_MESSAGES - len([m for m in st.session_state.messages if m["role"] == "user"])
     if questions_restantes <= 3:
-    st.warning(f"Il vous reste {questions_restantes} question(s) dans cette session.")
+        st.warning(f"Il vous reste {questions_restantes} question(s) dans cette session.")
     if len([m for m in st.session_state.messages if m["role"] == "user"]) >= MAX_MESSAGES:
         st.error("Limite de 10 questions atteinte. Cliquez sur 'Nouvelle conversation'.")
     elif question := st.chat_input("Posez votre question sur la comptabilite, la fiscalite ou l'entretien..."):
