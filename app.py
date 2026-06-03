@@ -411,7 +411,10 @@ def detecter_sentiment(question):
     return None
 
 FICHIERS_DRIVE = {
-    "livre_entretien_comptable.pdf": "VOTRE_ID_DRIVE_ICI",
+    "cgi_2026.pdf": "1luUHSgRlhcCA6AafjZHr9nTTTQBbLuNg",
+    "organisation_comptable.pdf" : "1Ug9uSvKHAQ-tPY6hQhB_pIyDBDk6juAe",
+    "audcif.pdf": "15znevP2FxJCTgVww2jpthm5o5SaHhF_n",
+    "entretien_comptable.pdf" : "1Ajlw0_CH6EbBdWKSntfxn4wc5QDt9EGa",
 }
 
 def telecharger_fichiers():
@@ -503,6 +506,10 @@ IBA (Impot sur les Benefices d'Affaires) :
 - Amortissement uniquement en mode lineaire
 
 AIB (Acompte d'Impot assis sur le Benefice) :
+- 1% 1% pour : 
+    -les importations de marchandises ; 
+    -les achats commerciaux et fournitures de travaux réalisés par les entreprises  immatriculées à l’identifiant fiscal unique ; 
+    -les fournitures de travaux, de biens et de services à l’État, aux collectivités locales et aux entreprises publiques et semi-publiques ; 
 - 3% pour prestataires immatricules a l'IFU
 - 5% pour prestataires non immatricules
 - 20% pour prestataires non-residents (etrangers)
