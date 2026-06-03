@@ -603,7 +603,7 @@ def generer_reponse(llm, retriever, historique, question):
 
 # === INITIALISATION ===
 llm, retriever = charger_modele()
-
+MAX_MESSAGES = 10
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "mode" not in st.session_state:
@@ -616,7 +616,7 @@ if "score_qcu" not in st.session_state:
     st.session_state.score_qcu = {"correct": 0, "total": 0}
 if "question_rapide" not in st.session_state:
     st.session_state.question_rapide = None
-
+    
 # === CHOIX DU MODE ===
 st.markdown("### Choisissez votre mode d'apprentissage :")
 col_m1, col_m2 = st.columns(2)
@@ -773,7 +773,12 @@ else:
             st.markdown(message["content"])
 
     # Input
-    if question := st.chat_input("Posez votre question sur la comptabilite, la fiscalite ou l'entretien..."):
+    questions_restantes = MAX_MESSAGES - len([m for m in st.session_state.messages if m["role"] == "user"])
+    if questions_restantes <= 3:
+    st.warning(f"Il vous reste {questions_restantes} question(s) dans cette session.")
+    if len([m for m in st.session_state.messages if m["role"] == "user"]) >= MAX_MESSAGES:
+        st.error("Limite de 10 questions atteinte. Cliquez sur 'Nouvelle conversation'.")
+    elif question := st.chat_input("Posez votre question sur la comptabilite, la fiscalite ou l'entretien..."):
         st.session_state.messages.append({"role": "user", "content": question})
         with st.chat_message("user"):
             st.markdown(question)
