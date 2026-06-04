@@ -1248,6 +1248,49 @@ Reponds UNIQUEMENT avec le numero (1 a 20). Si aucune n'est proche, reponds 0.""
             return {"question_livre": qr["question"], "reponse": qr["reponse"], "score": top_candidats[0][0]}
     
     return None
+    
+    # Filtrer les questions qui contiennent au moins 1 mot en commun
+    candidats = []
+    for qr in LIVRE_QR:
+        q_livre = re2.sub(r'[?.,]','',qr["question"].lower())
+        mots_livre = set(q_livre.split()) - stop_words
+        score = len(mots & mots_livre) / len(mots | mots_livre) if mots | mots_livre else 0
+        if score > 0:
+            candidats.append((score, qr))
+    
+    # Trier et prendre les 20 meilleurs candidats
+    candidats.sort(key=lambda x: x[0], reverse=True)
+    top_candidats = candidats[:20]
+    
+    if not top_candidats:
+        return None
+    
+    # Demander au LLM de choisir parmi les 20 meilleurs
+    liste = "\n".join([f"{i+1}. {c[1]['question']}" for i, c in enumerate(top_candidats)])
+    
+    prompt = f"""Question posee par l'utilisateur : "{question_utilisateur}"
+
+Voici 20 questions d'un livre comptable. Trouve le numero de la question
+la plus proche semantiquement de celle posee.
+
+{liste}
+
+Reponds UNIQUEMENT avec le numero (1 a 20). Si aucune n'est proche, reponds 0."""
+
+    try:
+        response = llm.invoke(prompt)
+        num_str = response.content.strip()
+        num = int(''.join(filter(str.isdigit, num_str.split()[0])))
+        if 1 <= num <= len(top_candidats):
+            qr = top_candidats[num-1][1]
+            return {"question_livre": qr["question"], "reponse": qr["reponse"], "score": 1.0}
+    except:
+        # Fallback : prendre le meilleur score
+        if top_candidats[0][0] >= 0.2:
+            qr = top_candidats[0][1]
+            return {"question_livre": qr["question"], "reponse": qr["reponse"], "score": top_candidats[0][0]}
+    
+    return None
 
 # === 100 QCU AVEC OPTIONS A/B/C/D ===
 # Source: "Reussir son entretien d'embauche" — Odilon A. MAFON
@@ -2403,10 +2446,14 @@ Reponse pedagogique et encourageante :"""
 
 
 def generer_reponse(llm, retriever, historique, question):
+    # 1. Chercher dans le livre EN PRIORITE ABSOLUE
     resultat_livre = chercher_dans_livre(question, llm)
-    if resultat_livre and resultat_livre["score"] >= 0.20:
-        return f"D'apres le livre 'Reussir son entretien d'embauche au poste de comptable' (Odilon A. MAFON) :\n\n{resultat_livre['reponse']}"
-    # 2. Sinon RAG + LLM
+    
+    if resultat_livre:
+        # Retourner DIRECTEMENT la reponse du livre sans passer par le LLM
+        return f"**Source : Reussir son entretien d'embauche (Odilon A. MAFON)**\n\n**Question du livre :** {resultat_livre['question_livre']}\n\n**Reponse :** {resultat_livre['reponse']}"
+    
+    # 2. Seulement si pas trouve dans le livre → utiliser le LLM
     if retriever:
         contexte = retriever.invoke(question)
         contexte_formate = "\n\n".join(doc.page_content for doc in contexte)
