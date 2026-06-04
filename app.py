@@ -2375,7 +2375,7 @@ Reponse pedagogique et encourageante :"""
 def generer_reponse(llm, retriever, historique, question):
     # 1. Chercher d'abord dans le livre
     resultat_livre = chercher_dans_livre(question)
-    if resultat_livre and resultat_livre["score"] >= 0.35:
+    if resultat_livre and resultat_livre["score"] >= 0.20:
         return f"D'apres le livre 'Reussir son entretien d'embauche au poste de comptable' (Odilon A. MAFON) :\n\n{resultat_livre['reponse']}"
     # 2. Sinon RAG + LLM
     if retriever:
