@@ -149,8 +149,8 @@ st.markdown("""
      padding: 8px 16px; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
     <span style="color: white; font-size: 13px; font-family: Arial;">
     🎓 Préparez vos diplômes comptables avec <strong>ComptaProgresso</strong> — 
-    DSCG • DCG • DGC • LCCA | Tarifs en FCFA | 
-    <a href="mailto:mahomultiservices@gmail.com" style="color: #FFD580;">Inscriptions ouvertes</a>
+    DSCG • DCG • DGC • MCCA | Tarifs en FCFA | Contact: +229 01 47 96 95 77
+    <a href="mailto:comptaprogresso@gmail.com" style="color: #FFD580;">Inscriptions ouvertes</a>
     </span>
 </div>
 """, unsafe_allow_html=True)
