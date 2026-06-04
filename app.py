@@ -2450,16 +2450,14 @@ def generer_reponse(llm, retriever, historique, question):
     resultat_livre = chercher_dans_livre(question, llm)
     
     if resultat_livre:
-        # Retourner DIRECTEMENT la reponse du livre sans passer par le LLM
         reponse_livre = resultat_livre['reponse']
-# Limiter a la premiere phrase complete
-premieres_phrases = reponse_livre.split('.')
-reponse_courte = premieres_phrases[0].strip() + '.'
-if len(premieres_phrases) > 1 and len(premieres_phrases[1].strip()) > 10:
-    reponse_courte += ' ' + premieres_phrases[1].strip() + '.'
-return f"**D'apres le livre (Odilon A. MAFON) :**\n\n{reponse_courte}"
+        premieres_phrases = reponse_livre.split('.')
+        reponse_courte = premieres_phrases[0].strip() + '.'
+        if len(premieres_phrases) > 1 and len(premieres_phrases[1].strip()) > 10:
+            reponse_courte += ' ' + premieres_phrases[1].strip() + '.'
+        return f"**D'apres le livre (Odilon A. MAFON) :**\n\n{reponse_courte}"
     
-    # 2. Seulement si pas trouve dans le livre → utiliser le LLM
+    # 2. Seulement si pas trouve dans le livre
     if retriever:
         contexte = retriever.invoke(question)
         contexte_formate = "\n\n".join(doc.page_content for doc in contexte)
@@ -2476,7 +2474,6 @@ return f"**D'apres le livre (Odilon A. MAFON) :**\n\n{reponse_courte}"
     )
     reponse = llm.invoke(prompt_final)
     return reponse.content
-
 
 # === INITIALISATION ===
 llm, retriever = charger_modele()
