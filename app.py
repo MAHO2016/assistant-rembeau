@@ -1189,34 +1189,64 @@ LIVRE_QR = [
 ]
 
 def chercher_dans_livre(question_utilisateur, llm):
-    """
-    Utilise le LLM pour trouver la meilleure correspondance dans le livre
-    """
+    import re as re2
     import json as json_lib
     
-    # Construire la liste des questions du livre
-    questions_list = "\n".join([f"{i+1}. {qr['question']}" for i, qr in enumerate(LIVRE_QR)])
+    question_lower = question_utilisateur.lower()
     
-    prompt = f"""Tu as une liste de questions d'un livre comptable.
-Trouve le numero de la question la plus proche de celle posee par l'utilisateur.
+    # Mots stop
+    stop_words = {"le","la","les","de","du","des","un","une","et","ou","en","au",
+                  "aux","que","qui","quoi","comment","quels","quelles","quel","quelle",
+                  "est","sont","a","avec","pour","par","dans","sur","il","elle","je",
+                  "vous","nous","on","ce","se","si","ne","pas","plus","mais","donc",
+                  "car","mon","ma","mes","votre","son","sa","ses","leur","leurs"}
+    
+    mots = set(re2.sub(r'[?.,]','',question_lower).split()) - stop_words
+    
+    if not mots:
+        return None
+    
+    # Filtrer les questions qui contiennent au moins 1 mot en commun
+    candidats = []
+    for qr in LIVRE_QR:
+        q_livre = re2.sub(r'[?.,]','',qr["question"].lower())
+        mots_livre = set(q_livre.split()) - stop_words
+        score = len(mots & mots_livre) / len(mots | mots_livre) if mots | mots_livre else 0
+        if score > 0:
+            candidats.append((score, qr))
+    
+    # Trier et prendre les 20 meilleurs candidats
+    candidats.sort(key=lambda x: x[0], reverse=True)
+    top_candidats = candidats[:20]
+    
+    if not top_candidats:
+        return None
+    
+    # Demander au LLM de choisir parmi les 20 meilleurs
+    liste = "\n".join([f"{i+1}. {c[1]['question']}" for i, c in enumerate(top_candidats)])
+    
+    prompt = f"""Question posee par l'utilisateur : "{question_utilisateur}"
 
-Question posee : "{question_utilisateur}"
+Voici 20 questions d'un livre comptable. Trouve le numero de la question
+la plus proche semantiquement de celle posee.
 
-Liste des questions :
-{questions_list[:3000]}
+{liste}
 
-Reponds UNIQUEMENT avec le numero de la question la plus proche (ex: 42).
-Si aucune question n'est proche, reponds 0."""
+Reponds UNIQUEMENT avec le numero (1 a 20). Si aucune n'est proche, reponds 0."""
 
     try:
         response = llm.invoke(prompt)
         num_str = response.content.strip()
         num = int(''.join(filter(str.isdigit, num_str.split()[0])))
-        if 1 <= num <= len(LIVRE_QR):
-            qr = LIVRE_QR[num - 1]
+        if 1 <= num <= len(top_candidats):
+            qr = top_candidats[num-1][1]
             return {"question_livre": qr["question"], "reponse": qr["reponse"], "score": 1.0}
     except:
-        pass
+        # Fallback : prendre le meilleur score
+        if top_candidats[0][0] >= 0.2:
+            qr = top_candidats[0][1]
+            return {"question_livre": qr["question"], "reponse": qr["reponse"], "score": top_candidats[0][0]}
+    
     return None
 
 # === 100 QCU AVEC OPTIONS A/B/C/D ===
