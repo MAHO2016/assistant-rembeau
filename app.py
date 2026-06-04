@@ -1188,36 +1188,36 @@ LIVRE_QR = [
     {"num": 476, "question": "Quel est l'intru ?", "reponse": "FILOU FOU MARLOU RIPOU VOYOU RIPOU est l'intrus a souligner, car il est le seul de ces mots a prendre un X au pluriel, comme POU, CHOU, GENOU... ou FOU, qui est le seul honnete. T55 AU EAU AIE! YOYO (jouet) OU OUI ( ) Tous ces mots communs ne sont formes que de voyelles ; on trouve encore, pour remplir la parenthese : OIE et OUIE ou YEYE (style) et YOUYOU (barque). T56 COQ POULE TAUREAU VACHE CHEVAL JUMENT MOUTON ( ) Ces couples sont constitues d'animaux male et femelle : la BREBIS s'accouple ainsi au mouton. T57 INJURE RUINE . . . . IRE RE Les noms de cette suite doivent etre fournis, a parti"}
 ]
 
-def chercher_dans_livre(question_utilisateur, seuil=0.25):
-    import re as re2
-    question_lower = question_utilisateur.lower().strip()
-    stop_words = {"le","la","les","de","du","des","un","une","et","ou","en","au",
-                  "aux","que","qui","quoi","comment","quels","quelles","quel","quelle",
-                  "est","sont","a","avec","pour","par","dans","sur","il","elle","je",
-                  "vous","nous","on","ce","se","si","ne","pas","plus","mais","donc",
-                  "car","mon","ma","mes","votre","son","sa","ses","leur","leurs"}
-    mots_question = set(re2.sub(r'[?.,]','',question_lower).split()) - stop_words
-    if not mots_question:
-        return None
-    meilleur_score = 0
-    meilleure_reponse = None
-    meilleure_question = None
-    for qr in LIVRE_QR:
-        q_livre = re2.sub(r'[?.,]','',qr["question"].lower())
-        mots_livre = set(q_livre.split()) - stop_words
-        if not mots_livre:
-            continue
-        intersection = len(mots_question & mots_livre)
-        union = len(mots_question | mots_livre)
-        score = intersection / union if union > 0 else 0
-        if score > meilleur_score:
-            meilleur_score = score
-            meilleure_reponse = qr["reponse"]
-            meilleure_question = qr["question"]
-    if meilleur_score >= seuil:
-        return {"question_livre": meilleure_question, "reponse": meilleure_reponse, "score": round(meilleur_score,2)}
-    return None
+def chercher_dans_livre(question_utilisateur, llm):
+    """
+    Utilise le LLM pour trouver la meilleure correspondance dans le livre
+    """
+    import json as json_lib
+    
+    # Construire la liste des questions du livre
+    questions_list = "\n".join([f"{i+1}. {qr['question']}" for i, qr in enumerate(LIVRE_QR)])
+    
+    prompt = f"""Tu as une liste de questions d'un livre comptable.
+Trouve le numero de la question la plus proche de celle posee par l'utilisateur.
 
+Question posee : "{question_utilisateur}"
+
+Liste des questions :
+{questions_list[:3000]}
+
+Reponds UNIQUEMENT avec le numero de la question la plus proche (ex: 42).
+Si aucune question n'est proche, reponds 0."""
+
+    try:
+        response = llm.invoke(prompt)
+        num_str = response.content.strip()
+        num = int(''.join(filter(str.isdigit, num_str.split()[0])))
+        if 1 <= num <= len(LIVRE_QR):
+            qr = LIVRE_QR[num - 1]
+            return {"question_livre": qr["question"], "reponse": qr["reponse"], "score": 1.0}
+    except:
+        pass
+    return None
 
 # === 100 QCU AVEC OPTIONS A/B/C/D ===
 # Source: "Reussir son entretien d'embauche" — Odilon A. MAFON
@@ -2373,8 +2373,7 @@ Reponse pedagogique et encourageante :"""
 
 
 def generer_reponse(llm, retriever, historique, question):
-    # 1. Chercher d'abord dans le livre
-    resultat_livre = chercher_dans_livre(question)
+    resultat_livre = chercher_dans_livre(question, llm)
     if resultat_livre and resultat_livre["score"] >= 0.20:
         return f"D'apres le livre 'Reussir son entretien d'embauche au poste de comptable' (Odilon A. MAFON) :\n\n{resultat_livre['reponse']}"
     # 2. Sinon RAG + LLM
