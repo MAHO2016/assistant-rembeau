@@ -2451,7 +2451,7 @@ def generer_reponse(llm, retriever, historique, question):
     
     if resultat_livre:
         # Retourner DIRECTEMENT la reponse du livre sans passer par le LLM
-        return f"**Source : Reussir son entretien d'embauche (Odilon A. MAFON)**\n\n**Question du livre :** {resultat_livre['question_livre']}\n\n**Reponse :** {resultat_livre['reponse']}"
+        return f"**D'apres le livre (Odilon A. MAFON) :**\n\n{resultat_livre['reponse']}"
     
     # 2. Seulement si pas trouve dans le livre → utiliser le LLM
     if retriever:
