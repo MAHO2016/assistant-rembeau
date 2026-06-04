@@ -145,14 +145,6 @@ st.markdown("""
     <span class="badge badge-gold">🧠 Tests Psychotechniques</span>
     <span class="badge badge-orange">💼 Audit & Finances</span>
 </div>
-<div style="background: linear-gradient(135deg, #E65C00, #2B5EA7); 
-     padding: 8px 16px; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
-    <span style="color: white; font-size: 13px; font-family: Arial;">
-    🎓 Préparez vos diplômes comptables avec <strong>ComptaProgresso</strong> — 
-    DSCG • DCG • DGC • LCCA | Tarifs en FCFA | 
-    <a href="mailto:mahomultiservices@gmail.com" style="color: #FFD580;">Inscriptions ouvertes</a>
-    </span>
-</div>
 """, unsafe_allow_html=True)
 
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
@@ -1219,6 +1211,958 @@ def chercher_dans_livre(question_utilisateur, seuil=0.25):
     return None
 
 
+# === 100 QCU AVEC OPTIONS A/B/C/D ===
+# Source: "Reussir son entretien d'embauche" — Odilon A. MAFON
+# 25 Fiscalite + 25 Comptabilite + 25 Audit + 25 Psycho = 100 QCU
+
+QCU_FISCALITE = [
+    {
+        "question": "Qu'est-ce que le versement patronal sur salaires (VPS) ?",
+        "options": {
+            "A": "Les entreprises relevant du regime du forfait doivent souscrire au plus tard le 30 avril de chaque a...",
+            "B": "Le port est assure par le vendeur avec ses propres moyens. Il facture alors un montant forfaitaire c...",
+            "C": "L'organisation comptable doit assurer : un enregistrement exhaustif, au jour le jour, et sans retard...",
+            "D": "Le VPS est un impot direct du par les personnes physiques ou morales qui paient des traitements, emoluments, salaires et retributions accessoires. Tou..."
+        },
+        "correct": "D",
+        "explication": "Le VPS est un impot direct du par les personnes physiques ou morales qui paient des traitements, emoluments, salaires et retributions accessoires. Tou..."
+    },
+    {
+        "question": "Quelles sont les echeances de paiement de la TPS ?",
+        "options": {
+            "A": "La TPS est payee en deux (02) acomptes previsionnels calcules sur la base de l'impot de l'annee precedente. Le premier acompte au plus tard le 10 fevr...",
+            "B": "L'amortissement ne demunie pas le capital social car le capital rembourse est reconstitue systematiq...",
+            "C": "Les principales causes de dissolution sont les suivantes : arrivee au terme ; realisation ou extinct...",
+            "D": "Lors de la consignation Chez le fournisseur D : 411 Client C 4194 Clt, dette pr emb et mat cons Chez..."
+        },
+        "correct": "A",
+        "explication": "La TPS est payee en deux (02) acomptes previsionnels calcules sur la base de l'impot de l'annee precedente. Le premier acompte au plus tard le 10 fevr..."
+    },
+    {
+        "question": "Quel est le delai dont dispose l'administration fiscale pour donner suite aux observations faites par le contribuable a l'issue d'une proposition de rectification ?",
+        "options": {
+            "A": "La valeur Mathematique Comptable (VMC) d'un titre est obtenue en rapportant l'actif net comptable au...",
+            "B": "Les dates comptables sont : le 01 janvier N, ouverture de l'exercice (sauf en cas de debut d'activit...",
+            "C": "Lorsque l'administration fiscale recoit les observations du contribuable a l'issue d'une proposition de rectification, elle est tenue de confirmer les...",
+            "D": "L'IRCM, impot sur le revenu des capitaux mobiliers est un impot sur le revenu qui s'appliquent aux :..."
+        },
+        "correct": "C",
+        "explication": "Lorsque l'administration fiscale recoit les observations du contribuable a l'issue d'une proposition de rectification, elle est tenue de confirmer les..."
+    },
+    {
+        "question": "En quoi consiste le controle sur pieces ?",
+        "options": {
+            "A": "L'IS est payable en quatre (04) acomptes determines provisoirement d'apres l'impot de l'annee preced...",
+            "B": "Toutes personnes morales sont soumises a l'impot sur les societes, soit en raison de leur forme ou s...",
+            "C": "Tout redevable de l'IRF est tenu de remettre au plus tard le 10 fevrier de chaque annee, au service ...",
+            "D": "Le controle sur pieces est constitue par l'ensemble des travaux effectue dans les services de l'administration fiscale. L'administration fiscale contr..."
+        },
+        "correct": "D",
+        "explication": "Le controle sur pieces est constitue par l'ensemble des travaux effectue dans les services de l'administration fiscale. L'administration fiscale contr..."
+    },
+    {
+        "question": "Qu'est-ce que l'IRCM ?",
+        "options": {
+            "A": "L'IRCM, impot sur le revenu des capitaux mobiliers est un impot sur le revenu qui s'appliquent aux : revenus des valeurs mobilieres ; revenus des crea...",
+            "B": "Il existe trois (03) types de subventions : la subvention d'investissement ou d'equipement ; la subv...",
+            "C": "Le port est assure par le vendeur avec ses propres moyens. Il facture alors un montant forfaitaire c...",
+            "D": "La Taxe Professionnelle Synthetique (TPS) est une taxe due par les contribuables relevant de l'impot..."
+        },
+        "correct": "A",
+        "explication": "L'IRCM, impot sur le revenu des capitaux mobiliers est un impot sur le revenu qui s'appliquent aux : revenus des valeurs mobilieres ; revenus des crea..."
+    },
+    {
+        "question": "Quelle est la date de declaration de la TVA ?",
+        "options": {
+            "A": "Au Benin, les regimes d'imposition se resument au schema suivant :",
+            "B": "Tout assujetti a la taxe sur la valeur ajoutee est tenu de souscrire, aupres du service des impots au plus tard le 10 de chaque mois, et au titre du m...",
+            "C": "L'AIB s'entend acompte sur impot assis sur les benefices. Il est exigible sur : les marchandises imp...",
+            "D": "FILOU FOU MARLOU RIPOU VOYOU RIPOU est l'intrus a souligner, car il est le seul de ces mots a prendr..."
+        },
+        "correct": "B",
+        "explication": "Tout assujetti a la taxe sur la valeur ajoutee est tenu de souscrire, aupres du service des impots au plus tard le 10 de chaque mois, et au titre du m..."
+    },
+    {
+        "question": "Quel autre impot ou taxe est a la charge de l'employe a part l'ITS ?",
+        "options": {
+            "A": "Le montant de l'IBA ne peut etre inferieur a un minimum de perception egal a : 1,5% des produits enc...",
+            "B": "A part l'ITS, l'employe paye au profit de l'office de radiodiffusion et television du Benin : - mille (1 000) francs CFA sur le salaire du mois de mar...",
+            "C": "L'amortissement ne demunie pas le capital social car le capital rembourse est reconstitue systematiq...",
+            "D": "La valeur mathematique peut etre ex-coupon (coupon detache) c'est-a-dire calculee apres affectation ..."
+        },
+        "correct": "B",
+        "explication": "A part l'ITS, l'employe paye au profit de l'office de radiodiffusion et television du Benin : - mille (1 000) francs CFA sur le salaire du mois de mar..."
+    },
+    {
+        "question": "Comment calcule-t-on la valeur mathematique comptable (VMC) et la valeur mathematique intrinseque (VMI) ?",
+        "options": {
+            "A": "La valeur Mathematique Comptable (VMC) d'un titre est obtenue en rapportant l'actif net comptable au nombre (N) de titres. Ainsi : VMC = ANC / N. En d...",
+            "B": "Sont affranchies de l'impot sur les traitements et salaires : les indemnites de licenciement calcule...",
+            "C": "Au cours d'un mois donne si la TVA deductible est inferieure a la TVA brute ou collectee, il y a TVA...",
+            "D": "La procedure de rectification spontanee n'est applicable que si : le contribuable ne fait l'objet d'..."
+        },
+        "correct": "A",
+        "explication": "La valeur Mathematique Comptable (VMC) d'un titre est obtenue en rapportant l'actif net comptable au nombre (N) de titres. Ainsi : VMC = ANC / N. En d..."
+    },
+    {
+        "question": "Quelle est la date limite de declaration de l'IS ?",
+        "options": {
+            "A": "L'IS d'une annee est declare au plus tard le 30 avril de l'annee suivante.",
+            "B": "Le montant maximal qu'on peut regler par la caisse est 99.999 FCFA. Toute depense superieure ou a eg...",
+            "C": "Le produit est une notion comptable tandis que la recette est une notion de tresorerie.",
+            "D": "La cloture comptable est le processus qui consiste a arreter les comptes de l'entreprise a la fin d'..."
+        },
+        "correct": "A",
+        "explication": "L'IS d'une annee est declare au plus tard le 30 avril de l'annee suivante."
+    },
+    {
+        "question": "Qu'entendez-vous par ressources ?",
+        "options": {
+            "A": "Tout redevable de l'IRF est tenu de remettre au plus tard le 10 fevrier de chaque annee, au service ...",
+            "B": "L'IS d'une annee est declare au plus tard le 30 avril de l'annee suivante.",
+            "C": "Constituent des operations imposables au titre de l'impot sur les benefices d'affaires, sauf exonera...",
+            "D": "Les ressources representent les moyens qui ont permis a l'entite de realiser une operation donnee. Elles constituent l'origine c'est-a-dire le point d..."
+        },
+        "correct": "D",
+        "explication": "Les ressources representent les moyens qui ont permis a l'entite de realiser une operation donnee. Elles constituent l'origine c'est-a-dire le point d..."
+    },
+    {
+        "question": "Quelles sont les operations qui sont imposables au titre de l'IBA ?",
+        "options": {
+            "A": "Constituent des operations imposables au titre de l'impot sur les benefices d'affaires, sauf exonerations prevues a l'article 58 du code general des i...",
+            "B": "L'enseigne ou la plaque signaletique professionnelle doit, tout en respectant les regles d'exercice ...",
+            "C": "L'IBA est payable en quatre (04) acomptes, le premier au plus tard le 10mars, le deuxieme, le 10 jui...",
+            "D": "Il existe deux systemes d'enregistrement comptables : le systeme classique ; le systeme centralisate..."
+        },
+        "correct": "A",
+        "explication": "Constituent des operations imposables au titre de l'impot sur les benefices d'affaires, sauf exonerations prevues a l'article 58 du code general des i..."
+    },
+    {
+        "question": "Quelles sont les entites qui sont assujetties a l'IBA ?",
+        "options": {
+            "A": "Les responsabilites d'un comptable comprennent la tenue des livres comptables, l'enregistrement des ...",
+            "B": "La procedure de rectification contradictoire, procedure de droit commun, est celle qui est mise en o...",
+            "C": "L'IBA est du par les personnes physiques qui accomplissent habituellement, pour leur propre compte, une activite a caractere lucratif.",
+            "D": "Le produit est une notion comptable tandis que la recette est une notion de tresorerie."
+        },
+        "correct": "C",
+        "explication": "L'IBA est du par les personnes physiques qui accomplissent habituellement, pour leur propre compte, une activite a caractere lucratif."
+    },
+    {
+        "question": "Cas 4 sur l'IS",
+        "options": {
+            "A": "MAHO est une societe specialisee dans les formations et conseils en gestion cree depuis 2017. Au cours de l'exercice 2022, elle realise un chiffre d'a...",
+            "B": "Les redevables sont les personnes effectuant des operations imposables tandis que les contribuables ...",
+            "C": "Le benefice de ces differents regimes est soumis a une procedure a suivre aupres de la structure com...",
+            "D": "La titrisation est l'operation par laquelle une entite cede des creances qu'elle detient sur sa clie..."
+        },
+        "correct": "A",
+        "explication": "MAHO est une societe specialisee dans les formations et conseils en gestion cree depuis 2017. Au cours de l'exercice 2022, elle realise un chiffre d'a..."
+    },
+    {
+        "question": "Quelle est la date de paiement de la patente complementaire ?",
+        "options": {
+            "A": "Kokou est proprietaire d'un immeuble qu'il a loue a Monsieur John, un operateur pour y vivre avec sa...",
+            "B": "Les plus-values provenant de la cession, en cours d'exploitation, d'elements de l'actif immobilise, ...",
+            "C": "La patente complementaire doit etre declaree et payee au plus tard la fin du mois suivant celui de l'attribution du marche ou de l'avenant au niveau d...",
+            "D": "Constituent des titres executoires, les titres de perception suivants, revetus de la formule executo..."
+        },
+        "correct": "C",
+        "explication": "La patente complementaire doit etre declaree et payee au plus tard la fin du mois suivant celui de l'attribution du marche ou de l'avenant au niveau d..."
+    },
+    {
+        "question": "Quelle est l'echeance du paiement de la TVM ?",
+        "options": {
+            "A": "La taxe est due par le proprietaire du vehicule au nom duquel est etablie la carte grise. La taxe est acquittee au plus tard le 30 avril de chaque ann...",
+            "B": "MAHO est une societe specialisee dans les formations et conseils en gestion cree depuis 2017. Au cou...",
+            "C": "La contribution des patentes se compose : d'un droit fixe ; d'un droit proportionnel sur la valeur l...",
+            "D": "Les responsabilites d'un comptable comprennent la tenue des livres comptables, l'enregistrement des ..."
+        },
+        "correct": "A",
+        "explication": "La taxe est due par le proprietaire du vehicule au nom duquel est etablie la carte grise. La taxe est acquittee au plus tard le 30 avril de chaque ann..."
+    },
+    {
+        "question": "Qu'est-ce que la prime d'emission ?",
+        "options": {
+            "A": "Le controle sur pieces est constitue par l'ensemble des travaux effectue dans les services de l'admi...",
+            "B": "Une ecriture d'inventaire permet de valoriser et de mettre a jour les comptes de l'entreprise a la f...",
+            "C": "La prime d'emission constitue le prix que l'acheteur des nouveaux titres paye afin de beneficier des avantages anterieurement acquis par les anciens t...",
+            "D": "Kokou est proprietaire d'un immeuble qu'il a loue a Monsieur John par l'intermediaire de MAHO, une s..."
+        },
+        "correct": "C",
+        "explication": "La prime d'emission constitue le prix que l'acheteur des nouveaux titres paye afin de beneficier des avantages anterieurement acquis par les anciens t..."
+    },
+    {
+        "question": "Je suis un etablissement nouvellement cree, dois-je payer la TPS pour la premiere annee ?",
+        "options": {
+            "A": "MAHO est un etablissement specialise dans les formations et conseils, donc le taux d'imposition sur ...",
+            "B": "Encore appele fonds de roulement financier, fonds de roulement liquidite, fonds de roulement est une...",
+            "C": "Les biens sont insaisissables pour le recouvrement des creances d'impot et taxes : la literie, les v...",
+            "D": "Non, les entreprises nouvellement crees sont exonerees du paiement de la TPS pour les douze premiers mois."
+        },
+        "correct": "D",
+        "explication": "Non, les entreprises nouvellement crees sont exonerees du paiement de la TPS pour les douze premiers mois."
+    },
+    {
+        "question": "Comment gerez-vous les creances douteuses ?",
+        "options": {
+            "A": "Pour gerer les creances douteuses, je mets en place un processus rigoureux de suivi et de recouvrement des creances en retard ou en souffrance. Cela c...",
+            "B": "Le minimum a payer pour la TPVI est 1% du prix de cession.",
+            "C": "Elle est une patente due par les contribuables : qui prennent a bail des locaux d'une valeur locativ...",
+            "D": "La procedure MP est la procedure instauree par le fisc pour beneficier des exonerations qui sont org..."
+        },
+        "correct": "A",
+        "explication": "Pour gerer les creances douteuses, je mets en place un processus rigoureux de suivi et de recouvrement des creances en retard ou en souffrance. Cela c..."
+    },
+    {
+        "question": "Qu'est-ce que l'AIB ?",
+        "options": {
+            "A": "Dans ce cas, la banque informe le fournisseur ou le tireur que l'effet est reste impaye a l'echeance...",
+            "B": "Les agents des impots ayant au moins le grade d'inspecteur peuvent effectuer des controles ponctuels...",
+            "C": "Sont exoneres de la taxe sur la valeur ajoutee : les ventes et prestations realisees par les personn...",
+            "D": "L'AIB s'entend acompte sur impot assis sur les benefices. Il est exigible sur : les marchandises importees, y compris celles mises en regime suspensif..."
+        },
+        "correct": "D",
+        "explication": "L'AIB s'entend acompte sur impot assis sur les benefices. Il est exigible sur : les marchandises importees, y compris celles mises en regime suspensif..."
+    },
+    {
+        "question": "Qu'est-ce qu'un emploi ?",
+        "options": {
+            "A": "La date de mise ne vigueur est : le 01 janvier 2018 pour les comptes personnels ; le 01 janvier 2019...",
+            "B": "Dans ce cas, la banque informe le fournisseur ou le tireur que l'effet est reste impaye a l'echeance...",
+            "C": "Le VPS est un impot direct du par les personnes physiques ou morales qui paient des traitements, emo...",
+            "D": "L'emploi exprime l'utilisation qui est faite des ressources c'est-a-dire des moyens obtenus. Il constitue la destination c'est-a-dire le point d'arriv..."
+        },
+        "correct": "D",
+        "explication": "L'emploi exprime l'utilisation qui est faite des ressources c'est-a-dire des moyens obtenus. Il constitue la destination c'est-a-dire le point d'arriv..."
+    },
+    {
+        "question": "Quelle est la date de declaration de la contribution des patentes ?",
+        "options": {
+            "A": "VANITEUX ARROGANT CULTIVE ORGUEILLEUX HAUTAIN PRETENTIEUX Parmi les six mots de cette suite, un seul...",
+            "B": "L'ITS est un impot sur le revenu qui frappe : les revenus provenant des traitements, emoluments et s...",
+            "C": "Les emballages perdus sont des emballages reputes etre livres avec leur contenu, sans consignation n...",
+            "D": "La declaration de la contribution des patentes est souscrite au plus tard le 30 avril de chaque annee."
+        },
+        "correct": "D",
+        "explication": "La declaration de la contribution des patentes est souscrite au plus tard le 30 avril de chaque annee."
+    },
+    {
+        "question": "Qu'est-ce qu'une consignation ?",
+        "options": {
+            "A": "La consignation consiste pour le fournisseur a exiger de son client le depot d'une somme forfaitaire generalement superieur a la valeur des emballages...",
+            "B": "La reduction du capital est une operation extraordinaire qui consiste a diminuer le capital initiale...",
+            "C": "On peut trouver differents types d'ecritures de regularisation, tels que les provisions pour charges...",
+            "D": "La rectification spontanee est une demarche effectuee par un contribuable de bonne foi qui desire sp..."
+        },
+        "correct": "A",
+        "explication": "La consignation consiste pour le fournisseur a exiger de son client le depot d'une somme forfaitaire generalement superieur a la valeur des emballages..."
+    },
+    {
+        "question": "Quelles sont les conditions necessaires pour beneficier de la rectification spontanee ?",
+        "options": {
+            "A": "L'IBA est payable en quatre (04) acomptes determines provisoirement d'apres l'impot de l'annee prece...",
+            "B": "La procedure de rectification spontanee n'est applicable que si : le contribuable ne fait l'objet d'aucune procedure de rectification sur les points s...",
+            "C": "Le taux de l'impot sur les revenus fonciers est fixe a 12%.",
+            "D": "La fixation de seuil de signification permet : de mieux orienter et planifier la mission en concentr..."
+        },
+        "correct": "B",
+        "explication": "La procedure de rectification spontanee n'est applicable que si : le contribuable ne fait l'objet d'aucune procedure de rectification sur les points s..."
+    },
+    {
+        "question": "Je suis une personne physique, mon chiffre d'affaires est inferieur a cinquante millions (50.000.000) FCFA mais je veux etre au reel, que faire ?",
+        "options": {
+            "A": "Les dates comptables sont : le 01 janvier N, ouverture de l'exercice (sauf en cas de debut d'activit...",
+            "B": "Les caracteristiques auxiliaires d'une information financiere sont : la comparabilite ; la verifiabi...",
+            "C": "Les entites soumises au regime du forfait (qui payent la TPS) peuvent opter pour le regime du reel (qui payent l'IBA) sur demande expresse adressee a ...",
+            "D": "Pour gerer les creances douteuses, je mets en place un processus rigoureux de suivi et de recouvreme..."
+        },
+        "correct": "C",
+        "explication": "Les entites soumises au regime du forfait (qui payent la TPS) peuvent opter pour le regime du reel (qui payent l'IBA) sur demande expresse adressee a ..."
+    },
+    {
+        "question": "Est-ce que Monsieur John peut retenir l'IRF a la source pour reverser aux impots ?",
+        "options": {
+            "A": "Les elements soustractifs de la facture sont : les retours : lorsque les marchandises, matieres ou f...",
+            "B": "La date de mise ne vigueur est : le 01 janvier 2018 pour les comptes personnels ; le 01 janvier 2019...",
+            "C": "Solution Kokou est proprietaire d'un immeuble qu'il met en location. Les revenus issus de cette location d'immeuble est soumis a l'impot sur le revenu...",
+            "D": "Les biens sont insaisissables pour le recouvrement des creances d'impot et taxes : la literie, les v..."
+        },
+        "correct": "C",
+        "explication": "Solution Kokou est proprietaire d'un immeuble qu'il met en location. Les revenus issus de cette location d'immeuble est soumis a l'impot sur le revenu..."
+    }
+]
+
+QCU_COMPTABILITE = [
+    {
+        "question": "Qu'est-ce qu'une provision pour charges ?",
+        "options": {
+            "A": "Le remboursement d'un emprunt est enregistre comme une sortie de tresorerie dans la section 'Flux de...",
+            "B": "Une augmentation de capital serait enregistree comme une entree de tresorerie dans la section des fl...",
+            "C": "Une provision pour charges est une ecriture de regularisation qui enregistre une estimation de charges futures dont le montant ou la date exacte sont ...",
+            "D": "L'elaboration des etats financiers annuels comprend plusieurs etapes essentielles. Voici les princip..."
+        },
+        "correct": "C",
+        "explication": "Une provision pour charges est une ecriture de regularisation qui enregistre une estimation de charges futures dont le montant ou la date exacte sont ..."
+    },
+    {
+        "question": "Comment determinez-vous le montant approprie d'une provision ?",
+        "options": {
+            "A": "Toute correction d'erreur, commise et decouverte sur l'exercice en cours, s'effectue exclusivement p...",
+            "B": "En tant que comptable, la determination du montant approprie d'une provision repose sur une evaluation prudente et objective des obligations actuelles...",
+            "C": "Les droits de douane lies a un achat de marchandises sont enregistres soit dans le compte principal ...",
+            "D": "MAHO est un etablissement specialise dans les formations et conseils en gestion cree depuis 2017. Au..."
+        },
+        "correct": "B",
+        "explication": "En tant que comptable, la determination du montant approprie d'une provision repose sur une evaluation prudente et objective des obligations actuelles..."
+    },
+    {
+        "question": "Quels sont les soldes intermediaires de gestion ?",
+        "options": {
+            "A": "Les soldes intermediaires de gestion sont au nombre de huit (08). Nous avons : la marge commerciale (MC) ; la valeur ajoutee (VA) ; l'excedent brut d'...",
+            "B": "Les principes comptables fondamentaux structurent la representation comptable de l'entite. Issus his...",
+            "C": "Il s'agit d'une autre expression de convention du Systeme comptable OHADA selon lequel le bilan d'ou...",
+            "D": "En comptabilite, le debit et le credit sont des termes utilises pour enregistrer les mouvements d'ar..."
+        },
+        "correct": "A",
+        "explication": "Les soldes intermediaires de gestion sont au nombre de huit (08). Nous avons : la marge commerciale (MC) ; la valeur ajoutee (VA) ; l'excedent brut d'..."
+    },
+    {
+        "question": "Qu'est-ce qu'une ecriture comptable ?",
+        "options": {
+            "A": "Le montant de la premiere annuite d'amortissement degressif est determine en appliquant au prix de r...",
+            "B": "Les interets recus d'un placement financier sont enregistres comme des entrees de tresorerie dans la...",
+            "C": "Une ecriture comptable est l'ensemble des inscriptions comptables relatives a une meme operation lors de son enregistrement en comptabilite (journal o...",
+            "D": "Les flux de tresorerie lies aux activites d'exploitation comprennent les entrees et sorties de treso..."
+        },
+        "correct": "C",
+        "explication": "Une ecriture comptable est l'ensemble des inscriptions comptables relatives a une meme operation lors de son enregistrement en comptabilite (journal o..."
+    },
+    {
+        "question": "Quelles sont les differentes etapes d'une operation de liquidation ?",
+        "options": {
+            "A": "Dans le cas d'espece, le resultat etant deficitaire, il n'est donc pas possible de calculer son 30%....",
+            "B": "Les soldes intermediaires de gestion sont au nombre de huit (08). Nous avons : la marge commerciale ...",
+            "C": "Il existe deux systemes de presentation des etats financiers annuels : le systeme minimal de tresore...",
+            "D": "Les operations de liquidation s'effectuent en quatre etapes : le debut de la liquidation (inventaire du patrimoine, solde des amortissements et des pr..."
+        },
+        "correct": "D",
+        "explication": "Les operations de liquidation s'effectuent en quatre etapes : le debut de la liquidation (inventaire du patrimoine, solde des amortissements et des pr..."
+    },
+    {
+        "question": "Quel est le principe de fonctionnement du compte 585/588 ?",
+        "options": {
+            "A": "En tant que comptable, la creation d'une provision aux parties prenantes peut etre justifiee de plus...",
+            "B": "Les comptes 585 et 588, relatifs aux virements internes, sont utilises pour des raisons techniques dans les comptabilites organisees sur la base de jo...",
+            "C": "Les operations de liquidation s'effectuent en quatre etapes : le debut de la liquidation (inventaire...",
+            "D": "Il est essentiel de s'assurer que les comptes comptables sont equilibres pour garantir l'exactitude ..."
+        },
+        "correct": "B",
+        "explication": "Les comptes 585 et 588, relatifs aux virements internes, sont utilises pour des raisons techniques dans les comptabilites organisees sur la base de jo..."
+    },
+    {
+        "question": "Dans quel compte enregistre-t-on les droits de douane lies a un achat de marchandises ?",
+        "options": {
+            "A": "Pour enregistrer un produit constate d'avance, on credite le compte de produits correspondant et on ...",
+            "B": "Pour verifier l'equilibre comptable d'un bilan, vous devez vous assurer que la somme des actifs est ...",
+            "C": "Les droits de douane lies a un achat de marchandises sont enregistres soit dans le compte principal ou soit dans un sous compte ' Frais sur achats 601...",
+            "D": "Le benefice imposable est le benefice net, determine d'apres le resultat d'ensemble des operations d..."
+        },
+        "correct": "C",
+        "explication": "Les droits de douane lies a un achat de marchandises sont enregistres soit dans le compte principal ou soit dans un sous compte ' Frais sur achats 601..."
+    },
+    {
+        "question": "Quel est le referentiel comptable applicable dans l'espace OHADA ?",
+        "options": {
+            "A": "Conformite aux regles et procedures en vigueur. C'est egalement l'obligation que doit satisfaire tou...",
+            "B": "Le referentiel comptable applicable dans l'OHADA est le Systeme Comptable OHADA (SYSCOHADA). Il est constitue de l'Acte Uniforme relatif au Droit Comp...",
+            "C": "La verification de comptabilites peut demarrer de maniere inopinee le jour de la remise de l'avis de...",
+            "D": "Les demandes de justifications ne peuvent porter que sur un seul exercice comptable."
+        },
+        "correct": "B",
+        "explication": "Le referentiel comptable applicable dans l'OHADA est le Systeme Comptable OHADA (SYSCOHADA). Il est constitue de l'Acte Uniforme relatif au Droit Comp..."
+    },
+    {
+        "question": "Quelles sont les personnes qui sont imposables a l'impot sur les revenus fonciers (IRF) ?",
+        "options": {
+            "A": "Pour verifier l'equilibre du tableau des flux de tresorerie en comptabilite, vous devez suivre les e...",
+            "B": "Sont imposables a l'IRF : les personnes physiques et assimilees (sont considerees comme personnes physiques assimilees, l'Etat, les communes, les etab...",
+            "C": "Dans la section des activites de financement, les ecritures comptables courantes englobent l'emissio...",
+            "D": "Un compte de contrepartie est un compte utilise pour enregistrer une operation qui compense ou contr..."
+        },
+        "correct": "B",
+        "explication": "Sont imposables a l'IRF : les personnes physiques et assimilees (sont considerees comme personnes physiques assimilees, l'Etat, les communes, les etab..."
+    },
+    {
+        "question": "Quelles sont les ecritures comptables necessaires pour enregistrer un achat d'equipement dans le tableau des flux de tresorerie ?",
+        "options": {
+            "A": "Le bilan est un etat recapitulatif de la situation patrimoniale de l'entite a une date donnee. Il es...",
+            "B": "Un solde crediteur sur le compte de resultat indique un excedent de revenus par rapport aux charges,...",
+            "C": "L'achat d'equipement serait enregistre comme une sortie de tresorerie dans la section des flux de tresorerie lies aux activites d'investissement. L'ec...",
+            "D": "Pour passer du bilan comptable au bilan fonctionnel, certains retraitements et corrections sont indi..."
+        },
+        "correct": "C",
+        "explication": "L'achat d'equipement serait enregistre comme une sortie de tresorerie dans la section des flux de tresorerie lies aux activites d'investissement. L'ec..."
+    },
+    {
+        "question": "Que vous inspire le chiffre 9 en deuxieme position ?",
+        "options": {
+            "A": "Le chiffre 9 en deuxieme position appelle un compte de provision.",
+            "B": "Crediter un compte, c'est inscrire une somme au credit de ce compte.",
+            "C": "Elle enregistre les transactions financieres au moment ou l'argent est effectivement recu ou depense...",
+            "D": "La situation nette (SN) d'une entite se determine de deux manieres : 1ere methode : SN = Capitaux pr..."
+        },
+        "correct": "A",
+        "explication": "Le chiffre 9 en deuxieme position appelle un compte de provision."
+    },
+    {
+        "question": "Comment calcule -t-on la situation ?",
+        "options": {
+            "A": "Une immobilisation est l'ensemble des elements corporels et incorporels destines a servir de facon d...",
+            "B": "La situation nette (SN) d'une entite se determine de deux manieres : 1ere methode : SN = Capitaux propres 2eme methode SN = Total Actif - (Dettes Fina...",
+            "C": "Encore appele le bilan patrimonial, bilan liquide, c'est le bilan dans lequel les postes sont evalue...",
+            "D": "Le benefice imposable est le benefice net, determine d'apres le resultat d'ensemble des operations d..."
+        },
+        "correct": "B",
+        "explication": "La situation nette (SN) d'une entite se determine de deux manieres : 1ere methode : SN = Capitaux propres 2eme methode SN = Total Actif - (Dettes Fina..."
+    },
+    {
+        "question": "Comment une augmentation de capital serait-elle enregistree dans le tableau des flux de tresorerie ?",
+        "options": {
+            "A": "Dans la section des activites d'exploitation, les ecritures comptables courantes incluent les ventes...",
+            "B": "Les entites qui ont l'obligation de tenir une comptabilite d'engagement ou d'exercice sont les entit...",
+            "C": "La reouverture d'un compte, c'est l'inscription du solde du compte au cote correspondant a sa nature...",
+            "D": "Une augmentation de capital serait enregistree comme une entree de tresorerie dans la section des flux de tresorerie lies aux activites de financement..."
+        },
+        "correct": "D",
+        "explication": "Une augmentation de capital serait enregistree comme une entree de tresorerie dans la section des flux de tresorerie lies aux activites de financement..."
+    },
+    {
+        "question": "Qu'est-ce qu'un resultat net ?",
+        "options": {
+            "A": "Les demandes de justifications ne peuvent porter que sur un seul exercice comptable.",
+            "B": "Le resultat net est la difference entre les produits et les charges lies a l'ensemble des activites de l'entite, le resultat de l'exercice est aussi e...",
+            "C": "Un solde crediteur sur le compte de resultat indique un excedent de revenus par rapport aux charges,...",
+            "D": "Dans la section des activites d'exploitation, les ecritures comptables courantes incluent les ventes..."
+        },
+        "correct": "B",
+        "explication": "Le resultat net est la difference entre les produits et les charges lies a l'ensemble des activites de l'entite, le resultat de l'exercice est aussi e..."
+    },
+    {
+        "question": "Quel est le delai legal de representation et de conservation des documents comptables ?",
+        "options": {
+            "A": "L'acquisition d'un actif est enregistree au bilan en debitant le compte d'actif concerne et en credi...",
+            "B": "Les documents comptables doivent etre conserves en Republique du Benin pendant un delai de dix (10) ans a compter de la date de la derniere operation ...",
+            "C": "Les interets recus d'un placement financier sont enregistres comme des entrees de tresorerie dans la...",
+            "D": "Les activites d'exploitation representent les flux de tresorerie generes par les activites principal..."
+        },
+        "correct": "B",
+        "explication": "Les documents comptables doivent etre conserves en Republique du Benin pendant un delai de dix (10) ans a compter de la date de la derniere operation ..."
+    },
+    {
+        "question": "Que veut dire crediter un compte ?",
+        "options": {
+            "A": "Crediter un compte, c'est inscrire une somme au credit de ce compte.",
+            "B": "Conformite aux regles et procedures en vigueur. C'est egalement l'obligation que doit satisfaire tou...",
+            "C": "Le bilan fonctionnel est un bilan dans lequel les postes sont evalues a leur valeur d'origine et cla...",
+            "D": "Le compte est donc un tableau a double colonne destine a suivre les variations d'un poste du bilan. ..."
+        },
+        "correct": "A",
+        "explication": "Crediter un compte, c'est inscrire une somme au credit de ce compte."
+    },
+    {
+        "question": "Qu'est-ce que le port debourse ?",
+        "options": {
+            "A": "Il existe deux systemes de presentation des etats financiers annuels : le systeme minimal de tresore...",
+            "B": "Le banquier se retourne contre le dernier beneficiaire et lui reclame le montant de l'effet impaye m...",
+            "C": "Le resultat net est la difference entre les produits et les charges lies a l'ensemble des activites ...",
+            "D": "Le port est dit 'port debourse' ou 'debours' lorsque le vendeur facture a l'acheteur des frais de port payes a un transporteur pour le compte de l'ach..."
+        },
+        "correct": "D",
+        "explication": "Le port est dit 'port debourse' ou 'debours' lorsque le vendeur facture a l'acheteur des frais de port payes a un transporteur pour le compte de l'ach..."
+    },
+    {
+        "question": "Comment gerez-vous en tant que comptable les paiements qui ont ete credites a la mauvaise periode comptable ?",
+        "options": {
+            "A": "La tresorerie immediate est l'argent en especes, des soldes de compte courant ou des depots bancaire...",
+            "B": "Les droits de douane lies a un achat de marchandises sont enregistres soit dans le compte principal ...",
+            "C": "En tant que comptable, la gestion des paiements credites a la mauvaise periode comptable peut etre un defi, mais il existe plusieurs etapes que vous p...",
+            "D": "L'ESFP est une procedure fiscale qui permet a l'administration fiscale de controler la coherence ent..."
+        },
+        "correct": "C",
+        "explication": "En tant que comptable, la gestion des paiements credites a la mauvaise periode comptable peut etre un defi, mais il existe plusieurs etapes que vous p..."
+    },
+    {
+        "question": "Qu'est-ce qu'une immobilisation ?",
+        "options": {
+            "A": "En tant que comptable, la determination du montant approprie d'une provision repose sur une evaluati...",
+            "B": "La tresorerie immediate est l'argent en especes, des soldes de compte courant ou des depots bancaire...",
+            "C": "Une immobilisation est l'ensemble des elements corporels et incorporels destines a servir de facon durable a l'activite de l'entite. Ils ne se consomm...",
+            "D": "Pour verifier l'equilibre comptable d'un bilan, vous devez vous assurer que la somme des actifs est ..."
+        },
+        "correct": "C",
+        "explication": "Une immobilisation est l'ensemble des elements corporels et incorporels destines a servir de facon durable a l'activite de l'entite. Ils ne se consomm..."
+    },
+    {
+        "question": "Comment mesurez-vous l'efficacite du processus de rapprochement bancaire ?",
+        "options": {
+            "A": "Un solde debiteur sur le compte de resultat indique un excedent de charges par rapport aux revenus, ...",
+            "B": "Pour mesurer l'efficacite du processus de rapprochement bancaire, vous pouvez prendre en compte les indicateurs suivants : temps de traitement : Compa...",
+            "C": "Les livres comptables et autres supports dont la tenue est obligatoire sont : le livre-journal, dans...",
+            "D": "Elle enregistre les transactions financieres au moment ou l'argent est effectivement recu ou depense..."
+        },
+        "correct": "B",
+        "explication": "Pour mesurer l'efficacite du processus de rapprochement bancaire, vous pouvez prendre en compte les indicateurs suivants : temps de traitement : Compa..."
+    },
+    {
+        "question": "Quelles sont les etapes dans le processus d'achat-vente qui influencent la situation de l'entreprise ?",
+        "options": {
+            "A": "Dans le processus d'achat-vente, trois etapes chronologiques influencent la situation financiere de l'entreprise : la date de la commande ; la date de...",
+            "B": "Debiter un compte, c'est inscrire une somme au debit de ce compte.",
+            "C": "Dans la section des activites de financement, les ecritures comptables courantes englobent l'emissio...",
+            "D": "La tresorerie brute fait reference a la somme totale des liquidites detenus par une entreprise. Elle..."
+        },
+        "correct": "A",
+        "explication": "Dans le processus d'achat-vente, trois etapes chronologiques influencent la situation financiere de l'entreprise : la date de la commande ; la date de..."
+    },
+    {
+        "question": "Comment calcule-t-on l'actif net comptable (ANC) ?",
+        "options": {
+            "A": "Pour passer du bilan comptable au bilan fonctionnel, certains retraitements et corrections sont indi...",
+            "B": "Dans la section des activites d'investissement, les ecritures comptables courantes comprennent l'ach...",
+            "C": "La date de debut d'amortissement est la date a laquelle l'actif immobilise est en etat de fonctionne...",
+            "D": "C'est une methode d'evaluation qui assimile la valeur de l'entreprise a la situation nette comptable. Cette evaluation est faite a partir des valeurs ..."
+        },
+        "correct": "D",
+        "explication": "C'est une methode d'evaluation qui assimile la valeur de l'entreprise a la situation nette comptable. Cette evaluation est faite a partir des valeurs ..."
+    },
+    {
+        "question": "Quels sont les avantages en natures consentis aux salaries ?",
+        "options": {
+            "A": "Une augmentation des creances clients, qui signifie que les clients doivent encore payer pour des bi...",
+            "B": "Les avantages en nature consentis aux salaries sont debites par nature en : 614 Transport du personnel ; 622 Location et charges locatives ; 624 Entre...",
+            "C": "Le port est dit 'port debourse' ou 'debours' lorsque le vendeur facture a l'acheteur des frais de po...",
+            "D": "Le resultat net est la difference entre les produits et les charges lies a l'ensemble des activites ..."
+        },
+        "correct": "B",
+        "explication": "Les avantages en nature consentis aux salaries sont debites par nature en : 614 Transport du personnel ; 622 Location et charges locatives ; 624 Entre..."
+    },
+    {
+        "question": "Comment enregistre-t-on une provision pour charges ?",
+        "options": {
+            "A": "Pour enregistrer une provision pour charges, on credite le compte de charges correspondant et on debite le compte de provisions pour charges (19.).",
+            "B": "Le port est dit 'port debourse' ou 'debours' lorsque le vendeur facture a l'acheteur des frais de po...",
+            "C": "Le solde d'un compte : c'est la difference entre le total des sommes portees au debit et le total de...",
+            "D": "Les interets recus d'un placement financier sont enregistres comme des entrees de tresorerie dans la..."
+        },
+        "correct": "A",
+        "explication": "Pour enregistrer une provision pour charges, on credite le compte de charges correspondant et on debite le compte de provisions pour charges (19.)."
+    },
+    {
+        "question": "Comment enregistrer le remboursement d'une dette au bilan ?",
+        "options": {
+            "A": "Le tableau des flux de tresorerie est important car il permet de comprendre comment une entreprise g...",
+            "B": "Dans le cas d'espece, le resultat etant deficitaire, il n'est donc pas possible de calculer son 30%....",
+            "C": "Un controle ponctuel et une verification de comptabilites sont deux types d'examens fiscaux realises...",
+            "D": "Le remboursement d'une dette est enregistre au bilan en debitant le compte de tresorerie ou le compte de passif utilise pour effectuer le remboursemen..."
+        },
+        "correct": "D",
+        "explication": "Le remboursement d'une dette est enregistre au bilan en debitant le compte de tresorerie ou le compte de passif utilise pour effectuer le remboursemen..."
+    }
+]
+
+QCU_AUDIT = [
+    {
+        "question": "Pourquoi le rapprochement bancaire est-il important ?",
+        "options": {
+            "A": "Les objectifs de l'organisation comptable sont de garantir l'exactitude et la fiabilite des informat...",
+            "B": "Non, l'administration fiscale ne peut effectuer aucune rectification concernant une periode precedem...",
+            "C": "Le rapprochement bancaire est important car il permet de verifier l'exactitude des transactions financieres enregistrees dans les livres comptables d'...",
+            "D": "En matiere fiscale, il existe trois (03) formes de controle : le controle sur pieces ; le controle p..."
+        },
+        "correct": "C",
+        "explication": "Le rapprochement bancaire est important car il permet de verifier l'exactitude des transactions financieres enregistrees dans les livres comptables d'..."
+    },
+    {
+        "question": "Quels sont les avantages et les inconvenients d'un rapprochement bancaire manuel par rapport a un rapprochement bancaire automatise ?",
+        "options": {
+            "A": "En tant que comptable, la gestion des erreurs de saisie dans le rapprochement bancaire est essentiel...",
+            "B": "Voici les avantages et les inconvenients de chaque approche : Rapprochement bancaire manuel : Avantages : controle accru : Le rapprochement manuel per...",
+            "C": "Encore appele chiffre d'affaires critique, chiffre d'affaires minimum, point mort, c'est le chiffre ...",
+            "D": "Le controle sur pieces et la verification de comptabilites sont deux types de controles fiscaux effe..."
+        },
+        "correct": "B",
+        "explication": "Voici les avantages et les inconvenients de chaque approche : Rapprochement bancaire manuel : Avantages : controle accru : Le rapprochement manuel per..."
+    },
+    {
+        "question": "Dans quel delai l'administration fiscale est tenue d'envoyer une notification de rectification a la suite d'un controle ponctuel ?",
+        "options": {
+            "A": "Voici les avantages et les inconvenients de chaque approche : Rapprochement bancaire manuel : Avanta...",
+            "B": "Pour verifier si un paiement est justifie, il faut suivre les etapes suivantes : verification de la ...",
+            "C": "Si une rectification est envisagee a la suite d'un controle ponctuel, la notification de cette rectification doit parvenir dans les quinze (15) jours ...",
+            "D": "Le rapprochement bancaire est un processus qui consiste a comparer les releves bancaires d'une entre..."
+        },
+        "correct": "C",
+        "explication": "Si une rectification est envisagee a la suite d'un controle ponctuel, la notification de cette rectification doit parvenir dans les quinze (15) jours ..."
+    },
+    {
+        "question": "Comment pouvez-vous en tant que comptable garantir que tous les paiements sont inclus dans le rapprochement bancaire ?",
+        "options": {
+            "A": "En tant que comptable, il est essentiel de mettre en place des procedures rigoureuses pour garantir l'inclusion de tous les paiements dans le rapproch...",
+            "B": "L'audit joue un role essentiel dans la verification des provisions. Les provisions sont des montants...",
+            "C": "Processus de production, de mise en oeuvre et de controle de l'application des normes comptables. Il...",
+            "D": "Les ratios de tresorerie sont : le ratio de tresorerie globale (RTG). ; RTG > 1, implique seuil de c..."
+        },
+        "correct": "A",
+        "explication": "En tant que comptable, il est essentiel de mettre en place des procedures rigoureuses pour garantir l'inclusion de tous les paiements dans le rapproch..."
+    },
+    {
+        "question": "Quels sont les facteurs qui peuvent affecter la creation de provisions ?",
+        "options": {
+            "A": "Il est recommande d'effectuer un rapprochement bancaire au moins une fois par mois, mais certaines e...",
+            "B": "Pour garantir la securite des donnees lors du rapprochement bancaire, vous pouvez mettre en place le...",
+            "C": "Voici les avantages et les inconvenients de chaque approche : Rapprochement bancaire manuel : Avanta...",
+            "D": "La creation de provisions peut etre affectee par plusieurs facteurs, notamment : les politiques comptables : Les provisions sont creees conformement a..."
+        },
+        "correct": "D",
+        "explication": "La creation de provisions peut etre affectee par plusieurs facteurs, notamment : les politiques comptables : Les provisions sont creees conformement a..."
+    },
+    {
+        "question": "Quels avantages offre le rapprochement bancaire aux entreprises ?",
+        "options": {
+            "A": "Le rapprochement bancaire offre plusieurs avantages aux entreprises. Il permet de detecter les erreurs et les fraudes, d'assurer l'exactitude des enre...",
+            "B": "Pour resoudre les ecarts lors d'un rapprochement bancaire, vous pouvez suivre ces etapes : verifiez ...",
+            "C": "Les charges representent les depenses courantes d'une entreprise liees a son fonctionnement quotidie...",
+            "D": "Pour automatiser le processus de rapprochement bancaire, vous pouvez utiliser des logiciels speciali..."
+        },
+        "correct": "A",
+        "explication": "Le rapprochement bancaire offre plusieurs avantages aux entreprises. Il permet de detecter les erreurs et les fraudes, d'assurer l'exactitude des enre..."
+    },
+    {
+        "question": "Comment gerez-vous les paiements en retard ?",
+        "options": {
+            "A": "Le controle sur pieces et la verification de comptabilites sont deux types de controles fiscaux effe...",
+            "B": "Les etapes du rapprochement bancaire comprennent : la collecte des releves bancaires et des enregist...",
+            "C": "Il est recommande d'effectuer un rapprochement bancaire au moins une fois par mois, mais certaines e...",
+            "D": "La gestion des paiements en retard est une partie importante de mon travail. Voici quelques etapes generales que je peux suivre pour gerer cette situa..."
+        },
+        "correct": "D",
+        "explication": "La gestion des paiements en retard est une partie importante de mon travail. Voici quelques etapes generales que je peux suivre pour gerer cette situa..."
+    },
+    {
+        "question": "Quelles sont les causes les plus courantes des differences lors d'un rapprochement bancaire ?",
+        "options": {
+            "A": "Les causes courantes des differences lors d'un rapprochement bancaire peuvent inclure des erreurs de saisie, des cheques non encaisses ou non enregist...",
+            "B": "Non, l'administration fiscale ne peut effectuer aucune rectification concernant une periode precedem...",
+            "C": "Les differentes etapes d'une mission d'audit sont : acceptation de la mission ; prise de connaissanc...",
+            "D": "Les charges representent les depenses courantes d'une entreprise liees a son fonctionnement quotidie..."
+        },
+        "correct": "A",
+        "explication": "Les causes courantes des differences lors d'un rapprochement bancaire peuvent inclure des erreurs de saisie, des cheques non encaisses ou non enregist..."
+    },
+    {
+        "question": "Quelle est la difference entre le controle sur pieces et la verification de comptabilites ?",
+        "options": {
+            "A": "Le controle sur pieces et la verification de comptabilites sont deux types de controles fiscaux effectues par l'administration fiscale pour verifier l...",
+            "B": "Processus de production, de mise en oeuvre et de controle de l'application des normes comptables. Il...",
+            "C": "Voici les avantages et les inconvenients de chaque approche : Rapprochement bancaire manuel : Avanta...",
+            "D": "En tant que comptable, il est essentiel de mettre en place des procedures rigoureuses pour garantir ..."
+        },
+        "correct": "A",
+        "explication": "Le controle sur pieces et la verification de comptabilites sont deux types de controles fiscaux effectues par l'administration fiscale pour verifier l..."
+    },
+    {
+        "question": "Comment gerez-vous les ecarts budgetaires ?",
+        "options": {
+            "A": "Pour evaluer les risques comptables, j'effectue une analyse approfondie des processus comptables et ...",
+            "B": "Les etapes du rapprochement bancaire comprennent : la collecte des releves bancaires et des enregist...",
+            "C": "Le controle sur pieces et la verification de comptabilites sont deux types de controles fiscaux effe...",
+            "D": "Pour gerer les ecarts budgetaires, il est important de suivre les etapes suivantes : analyser les ecarts : Comparez les depenses reelles aux prevision..."
+        },
+        "correct": "D",
+        "explication": "Pour gerer les ecarts budgetaires, il est important de suivre les etapes suivantes : analyser les ecarts : Comparez les depenses reelles aux prevision..."
+    },
+    {
+        "question": "Qu'est-ce que le seuil de rentabilite ?",
+        "options": {
+            "A": "Pour garantir la securite des donnees lors du rapprochement bancaire, vous pouvez mettre en place le...",
+            "B": "Nous avons deux ratios de rentabilite : le ratio de rentabilite financiere (RF). ; le ratio de renta...",
+            "C": "Les charges representent les depenses courantes d'une entreprise liees a son fonctionnement quotidie...",
+            "D": "Encore appele chiffre d'affaires critique, chiffre d'affaires minimum, point mort, c'est le chiffre d'affaires pour lequel l'entite ne realise ni de p..."
+        },
+        "correct": "D",
+        "explication": "Encore appele chiffre d'affaires critique, chiffre d'affaires minimum, point mort, c'est le chiffre d'affaires pour lequel l'entite ne realise ni de p..."
+    },
+    {
+        "question": "Comment determine-t-on le montant du seuil de rentabilite ?",
+        "options": {
+            "A": "Le seuil de rentabilite est determine a partir de la relation suivante lorsqu'il n'y a pas les autres produits variables :",
+            "B": "Les rectifications notifiees dans le cadre d'un controle ponctuel ne peuvent concerner que les impot...",
+            "C": "Pour garantir la securite des donnees lors du rapprochement bancaire, vous pouvez mettre en place le...",
+            "D": "Nous avons deux ratios de rentabilite : le ratio de rentabilite financiere (RF). ; le ratio de renta..."
+        },
+        "correct": "A",
+        "explication": "Le seuil de rentabilite est determine a partir de la relation suivante lorsqu'il n'y a pas les autres produits variables :"
+    },
+    {
+        "question": "Qui peut realiser un controle ponctuel ?",
+        "options": {
+            "A": "Les agents des impots ayant au moins le grade d'inspecteur peuvent effectuer des controles ponctuels.",
+            "B": "Pour resoudre les ecarts lors d'un rapprochement bancaire, vous pouvez suivre ces etapes : verifiez ...",
+            "C": "Les differentes etapes d'une mission d'audit sont : acceptation de la mission ; prise de connaissanc...",
+            "D": "Les objectifs de l'organisation comptable sont de garantir l'exactitude et la fiabilite des informat..."
+        },
+        "correct": "A",
+        "explication": "Les agents des impots ayant au moins le grade d'inspecteur peuvent effectuer des controles ponctuels."
+    },
+    {
+        "question": "Quelle est la duree legale d'un controle ponctuel ?",
+        "options": {
+            "A": "Le rapprochement bancaire offre plusieurs avantages aux entreprises. Il permet de detecter les erreu...",
+            "B": "En tant que comptable, il est essentiel de mettre en place des procedures rigoureuses pour garantir ...",
+            "C": "La duree de l'intervention sur place ne peut depasser trois (3) demi-journees dans un delai de quinze (15) jours.",
+            "D": "Pour evaluer les risques comptables, j'effectue une analyse approfondie des processus comptables et ..."
+        },
+        "correct": "C",
+        "explication": "La duree de l'intervention sur place ne peut depasser trois (3) demi-journees dans un delai de quinze (15) jours."
+    },
+    {
+        "question": "Comment gerez-vous en tant que comptable les erreurs de saisie dans le rapprochement bancaire ?",
+        "options": {
+            "A": "En tant que comptable, la gestion des erreurs de saisie dans le rapprochement bancaire est essentielle pour assurer l'exactitude des donnees financier...",
+            "B": "Le rapprochement bancaire offre plusieurs avantages aux entreprises. Il permet de detecter les erreu...",
+            "C": "Les differentes etapes d'une mission d'audit sont : acceptation de la mission ; prise de connaissanc...",
+            "D": "Le seuil de rentabilite est determine a partir de la relation suivante lorsqu'il n'y a pas les autre..."
+        },
+        "correct": "A",
+        "explication": "En tant que comptable, la gestion des erreurs de saisie dans le rapprochement bancaire est essentielle pour assurer l'exactitude des donnees financier..."
+    },
+    {
+        "question": "Comment garantissez-vous la securite des donnees lors du rapprochement bancaire ?",
+        "options": {
+            "A": "Pour garantir la securite des donnees lors du rapprochement bancaire, vous pouvez mettre en place les mesures suivantes : utilisation d'un logiciel se...",
+            "B": "Les objectifs de l'organisation comptable sont de garantir l'exactitude et la fiabilite des informat...",
+            "C": "Les etapes du rapprochement bancaire comprennent : la collecte des releves bancaires et des enregist...",
+            "D": "En tant que comptable, il est essentiel de mettre en place des procedures rigoureuses pour garantir ..."
+        },
+        "correct": "A",
+        "explication": "Pour garantir la securite des donnees lors du rapprochement bancaire, vous pouvez mettre en place les mesures suivantes : utilisation d'un logiciel se..."
+    },
+    {
+        "question": "Quelles sont les differentes formes de controle en matiere fiscale ?",
+        "options": {
+            "A": "En matiere fiscale, il existe trois (03) formes de controle : le controle sur pieces ; le controle ponctuel ; la verification de comptabilites.",
+            "B": "Voici les avantages et les inconvenients de chaque approche : Rapprochement bancaire manuel : Avanta...",
+            "C": "Pour gerer les ecarts budgetaires, il est important de suivre les etapes suivantes : analyser les ec...",
+            "D": "En tant que comptable, la gestion des erreurs de saisie dans le rapprochement bancaire est essentiel..."
+        },
+        "correct": "A",
+        "explication": "En matiere fiscale, il existe trois (03) formes de controle : le controle sur pieces ; le controle ponctuel ; la verification de comptabilites."
+    },
+    {
+        "question": "Quel est le role de l'audit dans la verification des provisions ?",
+        "options": {
+            "A": "Les ratios de tresorerie sont : le ratio de tresorerie globale (RTG). ; RTG > 1, implique seuil de c...",
+            "B": "Le rapprochement bancaire est important car il permet de verifier l'exactitude des transactions fina...",
+            "C": "L'audit joue un role essentiel dans la verification des provisions. Les provisions sont des montants mis de cote par une entreprise pour couvrir des o...",
+            "D": "Pour evaluer les risques comptables, j'effectue une analyse approfondie des processus comptables et ..."
+        },
+        "correct": "C",
+        "explication": "L'audit joue un role essentiel dans la verification des provisions. Les provisions sont des montants mis de cote par une entreprise pour couvrir des o..."
+    },
+    {
+        "question": "Quel est le nombre total de notes annexes ?",
+        "options": {
+            "A": "Le seuil de rentabilite est determine a partir de la relation suivante lorsqu'il n'y a pas les autre...",
+            "B": "Voici les avantages et les inconvenients de chaque approche : Rapprochement bancaire manuel : Avanta...",
+            "C": "Pour evaluer les risques comptables, j'effectue une analyse approfondie des processus comptables et ...",
+            "D": "Nous avons 46 notes annexes numerotes de 1 a 36 pour le systeme normal et 4 notes annexes pour le systeme minimal de tresorerie. Tests psychotechnique..."
+        },
+        "correct": "D",
+        "explication": "Nous avons 46 notes annexes numerotes de 1 a 36 pour le systeme normal et 4 notes annexes pour le systeme minimal de tresorerie. Tests psychotechnique..."
+    },
+    {
+        "question": "Quelles sont les differentes etapes d'un rapprochement bancaire ?",
+        "options": {
+            "A": "Le controle ponctuel en matiere fiscale fait reference a un type de verification fiscale effectuee p...",
+            "B": "Les etapes du rapprochement bancaire comprennent : la collecte des releves bancaires et des enregistrements comptables, la comparaison des transaction...",
+            "C": "Le rapprochement bancaire est important car il permet de verifier l'exactitude des transactions fina...",
+            "D": "La creation de provisions peut etre affectee par plusieurs facteurs, notamment : les politiques comp..."
+        },
+        "correct": "B",
+        "explication": "Les etapes du rapprochement bancaire comprennent : la collecte des releves bancaires et des enregistrements comptables, la comparaison des transaction..."
+    },
+    {
+        "question": "Qu'est-ce que la reglementation comptable ?",
+        "options": {
+            "A": "Le controle sur pieces et la verification de comptabilites sont deux types de controles fiscaux effe...",
+            "B": "Le rapprochement bancaire offre plusieurs avantages aux entreprises. Il permet de detecter les erreu...",
+            "C": "Processus de production, de mise en oeuvre et de controle de l'application des normes comptables. Il existe generalement trois modes de regulation com...",
+            "D": "Il est recommande d'effectuer un rapprochement bancaire au moins une fois par mois, mais certaines e..."
+        },
+        "correct": "C",
+        "explication": "Processus de production, de mise en oeuvre et de controle de l'application des normes comptables. Il existe generalement trois modes de regulation com..."
+    },
+    {
+        "question": "Quelle est la difference entre charge et cout ?",
+        "options": {
+            "A": "L'audit joue un role essentiel dans la verification des provisions. Les provisions sont des montants...",
+            "B": "Les rectifications notifiees dans le cadre d'un controle ponctuel ne peuvent concerner que les impot...",
+            "C": "Pour effectuer un rapprochement bancaire, vous devez comparer les releves bancaires avec les enregis...",
+            "D": "La principale difference entre charge et cout reside dans le fait que les charges sont les depenses et pertes enregistrees dans les comptes de charges..."
+        },
+        "correct": "D",
+        "explication": "La principale difference entre charge et cout reside dans le fait que les charges sont les depenses et pertes enregistrees dans les comptes de charges..."
+    },
+    {
+        "question": "Qu'appelle-t-on procedure analytique ?",
+        "options": {
+            "A": "C'est une technique de controle qui consiste a apprecier des informations financieres a partir : de leurs correlations avec d'autres informations, iss...",
+            "B": "Le rapprochement bancaire offre plusieurs avantages aux entreprises. Il permet de detecter les erreu...",
+            "C": "Pour verifier si un paiement est justifie, il faut suivre les etapes suivantes : verification de la ...",
+            "D": "En tant que comptable, la gestion des erreurs de saisie dans le rapprochement bancaire est essentiel..."
+        },
+        "correct": "A",
+        "explication": "C'est une technique de controle qui consiste a apprecier des informations financieres a partir : de leurs correlations avec d'autres informations, iss..."
+    },
+    {
+        "question": "Comment gerez-vous en tant que comptable les paiements en attente lors du rapprochement bancaire ?",
+        "options": {
+            "A": "Pour verifier si un paiement est justifie, il faut suivre les etapes suivantes : verification de la ...",
+            "B": "Le controle ponctuel en matiere fiscale fait reference a un type de verification fiscale effectuee p...",
+            "C": "Les agents des impots ayant au moins le grade d'inspecteur peuvent effectuer des controles ponctuels...",
+            "D": "En tant que comptable, la gestion des paiements en attente lors du rapprochement bancaire est une tache importante pour assurer l'exactitude des relev..."
+        },
+        "correct": "D",
+        "explication": "En tant que comptable, la gestion des paiements en attente lors du rapprochement bancaire est une tache importante pour assurer l'exactitude des relev..."
+    },
+    {
+        "question": "A quelle frequence faut-il effectuer un rapprochement bancaire ?",
+        "options": {
+            "A": "La duree de l'intervention sur place ne peut depasser trois (3) demi-journees dans un delai de quinz...",
+            "B": "Les etapes du rapprochement bancaire comprennent : la collecte des releves bancaires et des enregist...",
+            "C": "L'audit joue un role essentiel dans la verification des provisions. Les provisions sont des montants...",
+            "D": "Il est recommande d'effectuer un rapprochement bancaire au moins une fois par mois, mais certaines entreprises le font de maniere hebdomadaire ou quot..."
+        },
+        "correct": "D",
+        "explication": "Il est recommande d'effectuer un rapprochement bancaire au moins une fois par mois, mais certaines entreprises le font de maniere hebdomadaire ou quot..."
+    }
+]
+
+QCU_PSYCHO = [
+    {
+        "question": "Completez ou trouvez l'element manquant : 1 3 6 10 ( ) ( )",
+        "options": {
+            "A": "Chaque terme s'obtient, sur la suite naturelle et a partir de son troisieme term",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "Chaque terme s'obtient, sur la suite naturelle et a partir de son troisieme terme, en ajoutant tous ceux qui le precedent ; ainsi se forment successiv..."
+    },
+    {
+        "question": "Completez ou trouvez l'element manquant : 2 6 24 120 ( ) ( )",
+        "options": {
+            "A": "Chaque terme s'obtient sur la suite naturelle, sans zero et a partir du troisiem",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "Chaque terme s'obtient sur la suite naturelle, sans zero et a partir du troisieme terme, en multipliant tous les termes qui le precedent ; ainsi se fo..."
+    },
+    {
+        "question": "Completez ou trouvez l'element manquant : 0,5 0,25 0,2 ( ) 0,1",
+        "options": {
+            "A": "C'est la suite croissante des valeurs decimales limitees, des inverses des natur",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "C'est la suite croissante des valeurs decimales limitees, des inverses des naturels non superieurs a 10, donc des fractions ' decimalisables ' corresp..."
+    },
+    {
+        "question": "Completez ou trouvez l'element manquant : 1 4 2 8 5 7 1 4 2 ( ) ( ) ( )",
+        "options": {
+            "A": "C'est la suite des premieres decimales (chiffres apres la virgule) de la valeur ",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "C'est la suite des premieres decimales (chiffres apres la virgule) de la valeur decimale illimitee de la fraction 1/7, avec sa periode notee car : 1/7..."
+    },
+    {
+        "question": "Completez ou trouvez l'element manquant : 1 4 1 5 9 ( ) ( )",
+        "options": {
+            "A": "Cette suite est celle des premieres decimales de la valeur decimale illimitee no",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "Cette suite est celle des premieres decimales de la valeur decimale illimitee non-periodique, du nombre irrationnel d'Archimede note π, car π = 3,141 ..."
+    },
+    {
+        "question": "Completez ou trouvez l'element manquant : 4 1 4 2 1 ( ) ( )",
+        "options": {
+            "A": "Cette suite est celle des premieres decimales de la valeur du nombre irrationnel",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "Cette suite est celle des premieres decimales de la valeur du nombre irrationnel note √2, car √2 = 1,414 213 5... Ce nombre mesure la diagonale de tou..."
+    },
+    {
+        "question": "Completez ou trouvez l'element manquant : I V X ( ) C D M",
+        "options": {
+            "A": "Suite, par valeurs croissantes, des lettres constituant les divers chiffres roma",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "Suite, par valeurs croissantes, des lettres constituant les divers chiffres romains, soit : 1 5 10 L = 50 100 500 1000 La valeur 0, tout a fait inutil..."
+    },
+    {
+        "question": "Completez ou trouvez l'element manquant : L C CL CC CCL CCC CCCL ( )",
+        "options": {
+            "A": "Suite de multiples de 50, en numeration romaine, commencant par 50 = L puis fini",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "Suite de multiples de 50, en numeration romaine, commencant par 50 = L puis finissant par 400 = 500 - 100 = CD"
+    },
+    {
+        "question": "Completez ou trouvez l'element manquant : ( ) 110 111 1000 1001 1010",
+        "options": {
+            "A": "Suite naturelle partielle, en numeration binaire, de dernier terme 1010 = 2+ 8 =",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "Suite naturelle partielle, en numeration binaire, de dernier terme 1010 = 2+ 8 = 10, puis de premier 5 = 1 + 4 = 101"
+    },
+    {
+        "question": "Completez ou trouvez l'element manquant : 0 ( ) 8 6",
+        "options": {
+            "A": "Ensemble des chiffres decimaux a boucles, dont 1e manquant est evidemment 9.",
+            "B": "Suite arithmetique de raison +2",
+            "C": "Suite geometrique de raison x3",
+            "D": "Suite de nombres premiers"
+        },
+        "correct": "A",
+        "explication": "Ensemble des chiffres decimaux a boucles, dont 1e manquant est evidemment 9."
+    }
+]
+
+
 # === SENTIMENTS ===
 SENTIMENTS = {
     "merci": "Avec plaisir ! Je suis la pour vous aider a reussir votre entretien comptable. N'hesitez pas si vous avez d'autres questions.",
@@ -1457,6 +2401,10 @@ if "qcu_repondu" not in st.session_state:
     st.session_state.qcu_repondu = False
 if "qcu_cat" not in st.session_state:
     st.session_state.qcu_cat = "fiscalite"
+if "qcu_choix" not in st.session_state:
+    st.session_state.qcu_choix = None
+if "qcu_cat" not in st.session_state:
+    st.session_state.qcu_cat = "fiscalite"
 if "score_qcu" not in st.session_state:
     st.session_state.score_qcu = {"correct": 0, "total": 0}
 if "question_rapide" not in st.session_state:
@@ -1482,82 +2430,85 @@ st.divider()
 # ==========================================
 if st.session_state.mode == "qcu":
     st.markdown("### 🧠 Mode QCU — Entrainement aux entretiens")
+    st.caption("Source : Reussir son entretien d'embauche — Odilon A. MAFON | 100 QCU avec choix multiples")
 
-    # Score
     score = st.session_state.score_qcu
     if score["total"] > 0:
         pct = int(score["correct"] / score["total"] * 100)
-        st.info(f"Score : **{score['correct']}/{score['total']}** ({pct}%)")
+        emoji = "🟢" if pct >= 70 else "🟡" if pct >= 50 else "🔴"
+        st.markdown(f"{emoji} **Score : {score['correct']}/{score['total']} ({pct}%)**")
 
-    # Choix categorie
     st.markdown("**Choisissez une categorie :**")
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
+    cats_map = {
+        "fiscalite": QCU_FISCALITE,
+        "comptabilite": QCU_COMPTABILITE,
+        "audit": QCU_AUDIT,
+        "psycho": QCU_PSYCHO
+    }
+
     with col1:
-        if st.button("🏛️ Fiscalite", use_container_width=True):
-            questions = QUESTIONS_QCU["fiscalite"]
-            st.session_state.qcu_actif = random.choice(questions)
+        if st.button(f"🏛️ Fiscalite (25)", use_container_width=True):
+            st.session_state.qcu_actif = random.choice(QCU_FISCALITE)
             st.session_state.qcu_repondu = False
+            st.session_state.qcu_cat = "fiscalite"
             st.rerun()
     with col2:
-        if st.button("📊 Comptabilite", use_container_width=True):
-            questions = QUESTIONS_QCU["comptabilite"]
-            st.session_state.qcu_actif = random.choice(questions)
+        if st.button(f"📊 Comptabilite (25)", use_container_width=True):
+            st.session_state.qcu_actif = random.choice(QCU_COMPTABILITE)
             st.session_state.qcu_repondu = False
+            st.session_state.qcu_cat = "comptabilite"
             st.rerun()
     with col3:
-        if st.button("🧮 Psychotechnique", use_container_width=True):
-            questions = QUESTIONS_QCU["psychotechnique"]
-            st.session_state.qcu_actif = random.choice(questions)
+        if st.button(f"🔍 Audit (25)", use_container_width=True):
+            st.session_state.qcu_actif = random.choice(QCU_AUDIT)
             st.session_state.qcu_repondu = False
+            st.session_state.qcu_cat = "audit"
+            st.rerun()
+    with col4:
+        if st.button(f"🧮 Psycho (25)", use_container_width=True):
+            st.session_state.qcu_actif = random.choice(QCU_PSYCHO)
+            st.session_state.qcu_repondu = False
+            st.session_state.qcu_cat = "psycho"
             st.rerun()
 
-    # Afficher question active
     if st.session_state.qcu_actif:
         q = st.session_state.qcu_actif
         st.markdown("---")
         st.markdown(f"**Question :** {q['question']}")
         st.markdown("")
 
-        for option in q["options"]:
-            lettre = option[0]
-            if st.button(option, use_container_width=True, key=f"opt_{lettre}"):
-                st.session_state.score_qcu["total"] += 1
-                if lettre == q["reponse"]:
-                    st.session_state.score_qcu["correct"] += 1
-                    st.session_state.qcu_repondu = "correct"
+        if not st.session_state.qcu_repondu:
+            for lettre in ["A", "B", "C", "D"]:
+                if st.button(f"{lettre}) {q['options'][lettre]}", use_container_width=True, key=f"opt_{lettre}"):
+                    st.session_state.qcu_repondu = True
+                    st.session_state.qcu_choix = lettre
+                    if lettre == q["correct"]:
+                        st.session_state.score_qcu["correct"] += 1
+                    st.session_state.score_qcu["total"] += 1
+                    st.rerun()
+        else:
+            choix = st.session_state.get("qcu_choix", "")
+            bonne = q["correct"]
+            for lettre in ["A", "B", "C", "D"]:
+                if lettre == bonne:
+                    st.success(f"✅ {lettre}) {q['options'][lettre]}")
+                elif lettre == choix:
+                    st.error(f"❌ {lettre}) {q['options'][lettre]}")
                 else:
-                    st.session_state.qcu_repondu = "incorrect"
+                    st.write(f"{lettre}) {q['options'][lettre]}")
+            if choix == bonne:
+                st.success("🎉 Bonne reponse !")
+            else:
+                st.error(f"La bonne reponse etait : **{bonne})**")
+            st.info(f"💡 **Explication :** {q['explication']}")
+            cat = st.session_state.get("qcu_cat", "fiscalite")
+            if st.button("➡️ Question suivante", use_container_width=True):
+                st.session_state.qcu_actif = random.choice(cats_map[cat])
+                st.session_state.qcu_repondu = False
+                st.session_state.qcu_choix = None
                 st.rerun()
 
-        if st.session_state.qcu_repondu == "correct":
-            st.success(f"✅ Bonne reponse ! Reponse : **{q['reponse']}**")
-            st.info(f"💡 **Explication :** {q['explication']}")
-            if st.button("➡️ Question suivante", use_container_width=True):
-                cat = None
-                for k, v in QUESTIONS_QCU.items():
-                    if q in v:
-                        cat = k
-                        break
-                if cat:
-                    st.session_state.qcu_actif = random.choice(QUESTIONS_QCU[cat])
-                    st.session_state.qcu_repondu = False
-                    st.rerun()
-
-        elif st.session_state.qcu_repondu == "incorrect":
-            st.error(f"❌ Mauvaise reponse. La bonne reponse etait : **{q['reponse']}**")
-            st.info(f"💡 **Explication :** {q['explication']}")
-            if st.button("➡️ Question suivante", use_container_width=True):
-                cat = None
-                for k, v in QUESTIONS_QCU.items():
-                    if q in v:
-                        cat = k
-                        break
-                if cat:
-                    st.session_state.qcu_actif = random.choice(QUESTIONS_QCU[cat])
-                    st.session_state.qcu_repondu = False
-                    st.rerun()
-
-    # Reset score
     if st.button("🔄 Reinitialiser le score"):
         st.session_state.score_qcu = {"correct": 0, "total": 0}
         st.session_state.qcu_actif = None
@@ -1645,7 +2596,7 @@ with col2:
 # === FOOTER ===
 st.markdown("""
 <div class="rembeau-footer">
-    <span class="footer-left">2026 AssistantRembeau — Collection MAHO</span>
-    <span class="footer-right">Odilon A. MAFON</span>
+    <span class="footer-left">2026 AssistantRembeau</span>
+    <span class="footer-right">Odilon A. MAFON — ComptaProgresso</span>
 </div>
 """, unsafe_allow_html=True)
