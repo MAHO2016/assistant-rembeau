@@ -1227,9 +1227,9 @@ QCU_FISCALITE = [
     {
         "question": "Qu'est-ce que le versement patronal sur salaires (VPS) ?",
         "options": {
-            "A": "Les entreprises relevant du regime du forfait doivent souscrire au plus tard le 30 avril de chaque a...",
-            "B": "Le port est assure par le vendeur avec ses propres moyens. Il facture alors un montant forfaitaire c...",
-            "C": "L'organisation comptable doit assurer : un enregistrement exhaustif, au jour le jour, et sans retard...",
+            "A": "Est un produit pour la société",
+            "B": "Est payé chaque année par l'employé",
+            "C": "N'est pas déductible",
             "D": "Le VPS est un impot direct du par les personnes physiques ou morales qui paient des traitements, emoluments, salaires et retributions accessoires. Tou..."
         },
         "correct": "D",
