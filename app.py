@@ -2451,7 +2451,13 @@ def generer_reponse(llm, retriever, historique, question):
     
     if resultat_livre:
         # Retourner DIRECTEMENT la reponse du livre sans passer par le LLM
-        return f"**D'apres le livre (Odilon A. MAFON) :**\n\n{resultat_livre['reponse']}"
+        reponse_livre = resultat_livre['reponse']
+# Limiter a la premiere phrase complete
+premieres_phrases = reponse_livre.split('.')
+reponse_courte = premieres_phrases[0].strip() + '.'
+if len(premieres_phrases) > 1 and len(premieres_phrases[1].strip()) > 10:
+    reponse_courte += ' ' + premieres_phrases[1].strip() + '.'
+return f"**D'apres le livre (Odilon A. MAFON) :**\n\n{reponse_courte}"
     
     # 2. Seulement si pas trouve dans le livre → utiliser le LLM
     if retriever:
